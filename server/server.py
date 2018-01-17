@@ -25,11 +25,17 @@ import os
 
 def use_Twisted_ex2_5(port):
     class TSServProtocol(protocol.Protocol):
+        def sendData(self):
+            data = input('>>>')
+            if data:
+                self.transport.write(data.encode())
+            else:
+                self.transport.lostConnection()
         def connectionMade(self): #当一个客户端连接上该服务器程序时执行
-            clnt = self.clnt = self.transport.getPeer().host
-            print('---connected from:',clnt)
+            pass
         def dataReceived(self, data):#当服务器接收到客户端发送的数据时执行
-            self.transport.write(data)
+            print(data.decode())
+            self.sendData()
     factory = protocol.Factory()#返回一个实例
     factory.protocol = TSServProtocol #新建的一个‘协议’
     print('waiting for connection and listen port:',port)
