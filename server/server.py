@@ -23,7 +23,7 @@ from time import ctime
 import os
 
 
-def use_Twisted_ex2_5(port):
+def main(port):
     class TSServProtocol(protocol.Protocol):
         def sendData(self):
             data = input('>>>')
@@ -47,4 +47,4 @@ if __name__ == '__main__':
     port = arguments.get('<port>')
     if not port:
         port = 11000
-    use_Twisted_ex2_5(port)
+    main(port)
