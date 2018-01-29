@@ -1,5 +1,5 @@
 class ShowText:
-    def displayHelp(self):
+    def displayHelp(self): #TODO 这段代码还可以优化，先完成基本功能在优化
         '''
         1. 文本文件字段之间用'|'隔开
         2. 读取文件的所有行
@@ -14,11 +14,13 @@ class ShowText:
         colum0_maxlen = 0
         colum1_maxlen = 0
         colum2_maxlen = 0
+        colum3_maxlen = 0
         x2 = []
         # print('str=',str)
         for x in str:
             x1 = x.split('|')
-            x1[2] = x1[2].strip('\n')
+            # print('x1=',x1)
+            x1[3] = x1[3].strip('\n')
             x2.append(x1)
             if len(x1[0]) > colum0_maxlen:
                 colum0_maxlen = len(x1[0])
@@ -26,16 +28,20 @@ class ShowText:
                 colum1_maxlen = len(x1[1])
             if len(x1[2]) > colum2_maxlen:
                 colum2_maxlen = len(x1[2])
+            if len(x1[3]) > colum3_maxlen:
+                colum3_maxlen = len(x1[3])
 
         # print('x2=',x2)
         space = 3
+        colum0_maxlen = colum0_maxlen + space
         colum1_maxlen = colum1_maxlen + space
         colum2_maxlen = colum2_maxlen + space
-        colum0_maxlen = colum0_maxlen + space
+        colum3_maxlen = colum3_maxlen + space
 
         for x in x2:
             print(x[0].ljust(colum0_maxlen),end='')
             print(x[1].ljust(colum1_maxlen),end='')
+            print(x[3].ljust(colum3_maxlen),end='')
             print(x[2].ljust(colum2_maxlen))
 
 if __name__ == '__main__':
