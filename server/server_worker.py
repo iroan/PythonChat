@@ -1,3 +1,4 @@
+
 class Worker:
     '''
     功能：
@@ -7,3 +8,6 @@ class Worker:
     '''
     def __init__(self,nickname):
         self.nickname = nickname
+
+if __name__ == '__main__':
+    pass

@@ -27,7 +27,7 @@ def Main():
     sn = SignIn(udp_socket,addr)
     res = sn.show_start_GUI()
     if res:
-        work = Worker(udp_socket, addr, sn.getUserNickName())
+        work = Worker(udp_socket,sn.getUserNickName())
     udp_socket.close()
 
 if __name__ == '__main__':
