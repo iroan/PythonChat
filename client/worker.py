@@ -1,20 +1,19 @@
-import json
 from threading import Thread
 from client.handlerserver import HandlerServer
-
+from client.handlerinput import HandlerInput
 class Worker:
     def __init__(self,udp_socket,own_nickname):
-        self.info = {}
+        self.to_send_data = {}
         self.udp_socket = udp_socket
-        self.info['own_nickname'] = own_nickname
+        self.to_send_data['own_nickname'] = own_nickname
         self.create_process_input()
         self.process_server_message()
 
     def process_server_message(self):
         while True:
             data,addr = self.udp_socket.recvfrom(1024)
-            self.info['recv_data'] = data
-            HandlerServer(self.udp_socket,self.info)
+            self.to_send_data['recv_data'] = data
+            HandlerServer(self.udp_socket, self.to_send_data)
 
     def create_process_input(self):
         thread_send = Thread(target=self.process_input)
@@ -23,8 +22,11 @@ class Worker:
 
     def process_input(self):
         print('in process_input')
+        handler_input = HandlerInput(self.udp_socket, self.to_send_data)
         while True:
-            data = input('>>>') # TODO 需要自定义发送消息的数据结构
-            self.info['input_data'] = data
-            data1 = json.dumps(data)
-            self.udp_socket.sendto(data1.encode(),self.addr)
+            self.prompt = handler_input.to_send_data.get('prompt')
+            input_data = input(self.prompt) # TODO 需要自定义发送消息的数据结构
+            handler_input.anaylseInput(input_data)
+
+if __name__ == '__main__':
+    pass

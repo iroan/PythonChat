@@ -8,14 +8,15 @@ class Worker:
         self.client_data = data
         self.mysqlhelper = MySqlHelper('iroan', 'iroanMYS47', 'ssltools')
         self.addr = addr
-        self.processMessage()
+
 
     def processMessage(self):
         if self.client_data.get('event') == 'register':
             self.register()
 
         if self.client_data.get('event') == 'signin':
-            self.signin()
+            return self.signin()
+
 
     def register(self):
         nickname = self.client_data.get('nickname')
@@ -25,9 +26,13 @@ class Worker:
         self.udp_socket.sendto(result.encode(),self.addr)
 
 
+
     def signin(self):
         nickname = self.client_data.get('nickname')
         password = self.client_data.get('password')
         s1 = SignIn(nickname,password)
         result = s1.singin()
         self.udp_socket.sendto(result.encode(),self.addr)
+        if result == '登录成功':
+            return True
+

@@ -10,7 +10,7 @@ class ShowText:
         '''
         file = open('help.txt', 'r', encoding='utf-8')
         str = file.readlines()
-
+        print(str)
         colum0_maxlen = 0
         colum1_maxlen = 0
         colum2_maxlen = 0

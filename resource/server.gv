@@ -1,0 +1,32 @@
+/*
+dot -Tjpg server.gv -o server.jpg
+*/
+
+digraph{
+    rankdir = LR
+    node[
+        fontname="simhei"
+        shape = Mrecord
+    ]
+    edge[
+        splines=polyline
+    ]
+    rank = same
+//    {处理注册 处理登录 处理聊天 处理查看聊天 处理修改个人信息}
+
+    "启动" -> "循环接受client发送的数据"
+    "循环接受client发送的数据" -> "识别client请求"
+
+    "识别client请求" -> "处理登录" -> "更新数据库字段：是否在线、登录时间"
+
+    "识别client请求" -> "处理注册" -> "插入注册信息到数据库"
+
+    "识别client请求" -> "处理聊天"
+
+    "识别client请求" -> "处理查看聊天"
+
+    "识别client请求" -> "处理查看在线用户" -> "查询数据库字段：在否在线"
+
+    "识别client请求" -> "处理修改个人信息"
+}
+

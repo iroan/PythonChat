@@ -41,6 +41,13 @@ def Main():
         data = json.loads(recv_date)
         from server.worker import Worker
         work = Worker(udp_sock,data,client_addr)
+        if work.processMessage():
+            '''
+            client登录成功后需要其保留发送方的addr
+            1. 发送消息失败时，需要回信
+            2. 修改数据库信息失败时，需要回信
+            '''
+            pass
 
 def User():
     pass # TODO 实现server转发client用户通讯消息
