@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b400dd82-598c-4bfb-8cda-094c72946abe" name="Default" comment="编写项目需求文档">
-      <change beforePath="" afterPath="$PROJECT_DIR$/client/commserver.py" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/client.py" afterPath="$PROJECT_DIR$/client.py" />
-      <change beforePath="$PROJECT_DIR$/client/handlerinput.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/client/signin.py" afterPath="$PROJECT_DIR$/client/signin.py" />
-      <change beforePath="$PROJECT_DIR$/client/worker.py" afterPath="$PROJECT_DIR$/client/worker.py" />
-      <change beforePath="$PROJECT_DIR$/resource/client.gv" afterPath="$PROJECT_DIR$/resource/client.gv" />
-      <change beforePath="$PROJECT_DIR$/resource/client.jpg" afterPath="$PROJECT_DIR$/resource/client.jpg" />
-      <change beforePath="$PROJECT_DIR$/server.py" afterPath="$PROJECT_DIR$/server.py" />
-      <change beforePath="$PROJECT_DIR$/server/db.py" afterPath="$PROJECT_DIR$/server/db.py" />
-      <change beforePath="$PROJECT_DIR$/server/signin.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/server/worker.py" afterPath="$PROJECT_DIR$/server/worker.py" />
-      <change beforePath="$PROJECT_DIR$/share/share.py" afterPath="$PROJECT_DIR$/share/share.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
