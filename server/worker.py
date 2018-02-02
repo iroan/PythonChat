@@ -16,7 +16,7 @@ class Worker:
             self.signin()
 
         if self.data_from_client.get('event') == 'sol':
-            self.getOnlineClient()
+            self.getUsers()
 
         if self.data_from_client.get('event') == 'offline':
             self.offline()
@@ -60,12 +60,15 @@ class Worker:
             response_client = '密码错误'
         self.udp_socket.sendto(response_client.encode(),self.client_addr)
 
-    def getOnlineClient(self):
-        sql = 'select nickName from user where isOnline = 1;'
+    def getUsers(self):
+        sql = 'select nickName,trueName,department,isOnline from user;'
         data = self.mysqlhelper.read_all(sql)
-        print('data =\n', data)
+        print('data =\n',data)
         response_client = json.dumps({'event':'sol'
-                                ,'data':data})
-
+                                         ,'data':data})
         print('response_client =\n',response_client)
         self.udp_socket.sendto(response_client.encode(), self.client_addr)
+
+if __name__ == '__main__':
+    pass
+    # work = Worker('','','').getUsers()

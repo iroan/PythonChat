@@ -1,67 +1,17 @@
 from share.sha import getSha1
 import json
-
-class SignIn():
-
-    def __init__(self,udp_socket,addr):
-        self.udp_socket = udp_socket
-        self.addr = addr
-
-    def processSignIn(self):
-        print('注册-输入:1'.center(40))
-        print('登录-输入:2'.center(40))
-        num = input('输入数字:')
-        if num == '1':
-            self.register()
-        elif num == '2':
-            return self.signin()
-        else:
-            print('输入不合法！')
-
-    def signin(self):
-        self._get_nickname_password()
-        data = {'event':'signin'
-                ,'nickname':self.nickname
-                ,'password':self.password}
-        data1 = json.dumps(data)
-        self.udp_socket.sendto(data1.encode(),self.addr)
-        result = self.udp_socket.recvfrom(1024)
-        res = result[0].decode()
-        print(res)
-        if res == '登录成功':
-            return True
-
-    def register(self):
-        self._get_nickname_password()
-        data = {'event':'register'
-                ,'nickname':self.nickname
-                ,'password':self.password}
-        data1 = json.dumps(data)
-        self.udp_socket.sendto(data1.encode(),self.addr)
-        result = self.udp_socket.recvfrom(1024)
-        print(result[0].decode())
-        return True
-
-    def _get_nickname_password(self):
-        self.nickname = input('请输入昵称:')
-        password = self._get_password1('请输入密码: ') # TODO 优化密码输入
-        self.password = getSha1(password)
-
-    def _get_password(self,prompt): # 会以*提示输入
-        pass
-
-    def _get_password1(self,prompt): # 不提示输入个数
-        import getpass
-        return getpass.getpass(prompt)
-
-
-    def getUserNickName(self):
-        return self.nickname
-
+from socket import *
+from share.share import server_addr
 from PyQt5.QtWidgets import *
-class Ui_Form(QWidget):
+
+class SignIn_GUI(QWidget):
+    def __del__(self):
+        self.udp_socket.close()
+
     def __init__(self):
         super().__init__()
+        self.udp_socket = socket(AF_INET, SOCK_DGRAM)
+        self.udp_socket.connect(server_addr)
 
         self.setWindowTitle("登录界面")
         self.resize(200,100)
@@ -71,27 +21,54 @@ class Ui_Form(QWidget):
         Lab1=QLabel("用户名")
         Lab2=QLabel("密码")
 
-        Line1=QLineEdit()
-        Line2=QLineEdit()
+        self.Line1=QLineEdit()
+        self.Line2=QLineEdit()
         self.Line3=QLineEdit()
 
         OkB=QPushButton("确定")
         CB =QPushButton("取消")
 
-        lay.addRow(Lab1,Line1)
-        lay.addRow(Lab2,Line2)
-        lay.addRow(self.Line3)
+        lay.addRow(Lab1,self.Line1)
+        lay.addRow(Lab2,self.Line2)
         lay.addRow(OkB, CB)
         self.setLayout(lay)
 
         CB.clicked.connect(lambda :self.close())
-        OkB.clicked.connect(lambda :self.Print())
+        OkB.clicked.connect(lambda :self.onLogin())
 
-    def Print(self):
-        print('-------')
-        self.Line3.setText('wkxwkx')
+    def onLogin(self):
+        self.getNickName_Password()
+        data = {'event':'signin'
+                ,'nickname':self.nickname
+                ,'password':self.password}
+        data1 = json.dumps(data)
+        self.udp_socket.sendto(data1.encode(),server_addr)
+        result = self.udp_socket.recvfrom(1024)
+        res = result[0].decode()
+        print(res)
+        if res == '登录成功':
+            from client.main import MainGUI
+            self.main_gui = MainGUI(self.udp_socket)
+            self.main_gui.show()
+
+            self.hide()
+            # pass
+
+    # TODO 登录界面刚开始只显示登录按钮，若发现为注册，再显示登录按钮
+    # 注册之后要提醒登录
+    def onRegister(self):
+        self.getNickName_Password()
+        data = {'event':'register'
+                ,'nickname':self.nickname
+                ,'password':self.password}
+        data1 = json.dumps(data)
+        self.udp_socket.sendto(data1.encode(),self.addr)
+        result = self.udp_socket.recvfrom(1024)
+        print(result[0].decode())
+
+    def getNickName_Password(self):
+        self.nickname = self.Line1.text()
+        self.password = getSha1(self.Line2.text())
 
 if __name__ == '__main__':
-    # s1 = SignIn(' ')
-    # s1.processSignIn()
     pass

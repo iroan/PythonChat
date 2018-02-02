@@ -75,6 +75,35 @@ class Worker:
         send_data = json.dumps(data_sendto_server)
         self.udp_socket.sendto(send_data.encode(), server_addr)
 
+from PyQt5.QtWidgets import *
+
+class Worker_GUI(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("登录界面")
+        self.resize(200,100)
+
+        lay =QFormLayout()
+
+        Lab1=QLabel("用户名")
+        Lab2=QLabel("密码")
+
+        self.Line1=QLineEdit()
+        self.Line2=QLineEdit()
+        self.Line3=QLineEdit()
+
+        OkB=QPushButton("确定")
+        CB =QPushButton("取消")
+
+        lay.addRow(Lab1,self.Line1)
+        lay.addRow(Lab2,self.Line2)
+        lay.addRow(OkB, CB)
+        self.setLayout(lay)
+
+        CB.clicked.connect(lambda :self.close())
+        OkB.clicked.connect(lambda :self.onLogin())
+
 if __name__ == '__main__':
     # import asyncio
     # import threading
@@ -95,4 +124,7 @@ if __name__ == '__main__':
 编程总结：
 1. 若现在主程序中实现同时响应输入和输出，响应开启3个线程，即：主线程、输入线程、输出线程
 
+私聊
+组聊
+查看在线用户
 '''
