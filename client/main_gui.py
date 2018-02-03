@@ -9,22 +9,21 @@ from share.share import server_addr,sendData
 class Main(QMainWindow):
     def __init__(self,udp_socket,nickname,parent = None):
         super(Main, self).__init__(parent)
-
-        menu_bar = QMenuBar()
-        menu = QMenu('&C聊天',menu_bar)
-        action_quit = QAction('&Q退出')
-        menu.addAction(action_quit)
-        self.setMenuBar(menu_bar)
-
         self.udp_socket = udp_socket
         self.nickname = nickname
+
+        menu_chat = self.menuBar().addMenu('聊天')
+        self.action_quit = QAction('退出',menu_chat)
+        menu_chat.addAction(self.action_quit)
+        self.action_quit.triggered.connect(self.onQuit)
+        self.action_quit.triggered.connect(self.close)
+
         self.setWindowTitle('SSLTools')
         central_widget = CenterWidget(self.udp_socket)
         self.setCentralWidget(central_widget)
-        action_quit.triggered.connect(self.onQuit)
 
     def onQuit(self):
-        sendData(self.udp_socket,{'event': 'offline', 'nickname': self.own_nickname})
+        sendData(self.udp_socket,{'event': 'offline', 'nickname': self.nickname})
 
 class CenterWidget(QWidget):
     def __init__(self,udp_socket,parent = None):
