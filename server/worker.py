@@ -5,7 +5,7 @@ class Worker:
         self.udp_socket = udp_socket
         self.client_addr = client_addr
         self.data_from_client = data_from_client
-        self.is_1_Flag = b'\x01'
+        self.is_1_Flag = '在线'
         self.mysqlhelper = MySqlHelper('iroan','iroanMYS47','ssltools')
 
     def processMessage(self):
@@ -15,15 +15,15 @@ class Worker:
         if self.data_from_client.get('event') == 'signin':
             self.signin()
 
-        if self.data_from_client.get('event') == 'sol':
+        if self.data_from_client.get('event') == 'get_all_users_info':
             self.getUsers()
 
         if self.data_from_client.get('event') == 'offline':
             self.offline()
 
     def offline(self):
-        sql = 'update user set isOnline = 0 where nickName = %s;'
-        self.mysqlhelper.execute(sql, [self.data_from_client.get('nickname')])
+        sql = 'update user set isOnline = %s where nickName = %s;'
+        self.mysqlhelper.execute(sql, ['离线',self.data_from_client.get('nickname')])
 
 
     def register(self):
@@ -32,6 +32,7 @@ class Worker:
         res = self.mysqlhelper.execute(sql
                                        , [self.data_from_client.get('nickname')
                                                     ,self.data_from_client.get('password')])
+        print('response_client ')
         response_client = ''
         if res == 0:
             response_client = '注册失败-因为该昵称已经被使用，请换一个昵称注册'
@@ -43,9 +44,10 @@ class Worker:
 
     def signin(self):
         sql = 'select isOnline,password from user where nickName = %s;'
-        res = self.mysqlhelper.read_all(sql,[self.data_from_client.get('nickname')]) # TODO isOnline要设置默认值0
+        res = self.mysqlhelper.read_all(sql,[self.data_from_client.get('nickname')]) # TODO isOnline要设置默认值离线
         # 'navicat 设置索引中的名是什么意思、有什么作用'
         response_client = ''
+        print('res=',res)
         if res == ():
             response_client = '该用户未注册'
 
@@ -53,8 +55,8 @@ class Worker:
             if res[0][0] == self.is_1_Flag:
                 response_client = '该用户已登录，不能重复登录' # TODO 需要支持重复登录吗？
             if res[0][0] != self.is_1_Flag:
-                sql = 'update user set isOnline = 1 where nickName = %s;'
-                self.mysqlhelper.execute(sql, [self.data_from_client.get('nickname')])
+                sql = 'update user set isOnline = %s where nickName = %s;'
+                self.mysqlhelper.execute(sql, ['在线',self.data_from_client.get('nickname')])
                 response_client = '登录成功'
         else:
             response_client = '密码错误'

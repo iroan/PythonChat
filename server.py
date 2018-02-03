@@ -18,7 +18,7 @@ def Main():
     while True:
         recv_date,client_addr = udp_sock.recvfrom(1024)
         data = json.loads(recv_date)
-        print('date from client\n=',data)
+        print('--------\ndate from client=',data)
         from server.worker import Worker
         Worker(udp_sock,data,client_addr).processMessage()
 

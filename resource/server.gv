@@ -1,7 +1,6 @@
 /*
 dot -Tjpg server.gv -o server.jpg
 */
-
 digraph{
     rankdir = LR
     node[
@@ -12,7 +11,6 @@ digraph{
         splines=polyline
     ]
     rank = same
-//    {处理注册 处理登录 处理聊天 处理查看聊天 处理修改个人信息}
 
     "启动" -> "循环接受client发送的数据"
     "循环接受client发送的数据" -> "识别client请求"

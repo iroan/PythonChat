@@ -81,7 +81,7 @@ class MySqlHelper:
         try:
             self._connect()
             count = self.cursor.execute(sql,params)
-            self.conn.onLogin()
+            self.conn.commit()
             self._close()
         except Exception as e:
             print(e)

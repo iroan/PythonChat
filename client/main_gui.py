@@ -4,21 +4,33 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import json
 from socket import *
-from share.share import server_addr
+from share.share import server_addr,sendData
 
-class MainGUI(QMainWindow):
-    def __init__(self,udp_socket,parent = None):
-        super(MainGUI, self).__init__(parent)
+class Main(QMainWindow):
+    def __init__(self,udp_socket,nickname,parent = None):
+        super(Main, self).__init__(parent)
+
+        menu_bar = QMenuBar()
+        menu = QMenu('&C聊天',menu_bar)
+        action_quit = QAction('&Q退出')
+        menu.addAction(action_quit)
+        self.setMenuBar(menu_bar)
+
         self.udp_socket = udp_socket
+        self.nickname = nickname
         self.setWindowTitle('SSLTools')
         central_widget = CenterWidget(self.udp_socket)
         self.setCentralWidget(central_widget)
+        action_quit.triggered.connect(self.onQuit)
+
+    def onQuit(self):
+        sendData(self.udp_socket,{'event': 'offline', 'nickname': self.own_nickname})
 
 class CenterWidget(QWidget):
     def __init__(self,udp_socket,parent = None):
-        self.udp_socket = udp_socket
         super(CenterWidget,self).__init__(parent)
-        self.sendData({'event': 'sol'})
+        self.udp_socket = udp_socket
+        sendData(self.udp_socket,{'event': 'get_all_users_info'})
         data, addr = self.udp_socket.recvfrom(1024)
         datafromserver = json.loads(data)
 
@@ -88,21 +100,10 @@ class CenterWidget(QWidget):
                     root.setText(1, row_date[1])
                     root.setText(2, row_date[3])
 
-    def sendData(self,data_sendto_server):
-        '''
-        主要数据:
-            1. 发送方nickname
-            2. 接受方nickname
-            3. event
-            4. message
-        '''
-        send_data = json.dumps(data_sendto_server)
-        self.udp_socket.sendto(send_data.encode(), server_addr)
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     udp_socket = socket(AF_INET, SOCK_DGRAM)
     udp_socket.connect(server_addr)
-    myshow = MainGUI(udp_socket)
+    myshow = Main(udp_socket,' ')
     myshow.show()
     sys.exit(app.exec_())

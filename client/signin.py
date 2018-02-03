@@ -1,11 +1,12 @@
 from share.sha import getSha1
 import json
 from socket import *
-from share.share import server_addr
+from share.share import server_addr,sendData
 from PyQt5.QtWidgets import *
 
-class SignIn_GUI(QWidget):
+class SignIn(QWidget):
     def __del__(self):
+        sendData(self.udp_socket,{'event': 'offline', 'nickname': self.own_nickname})
         self.udp_socket.close()
 
     def __init__(self):
@@ -16,25 +17,31 @@ class SignIn_GUI(QWidget):
         self.setWindowTitle("登录界面")
         self.resize(200,100)
 
-        lay =QFormLayout()
+        lay =QGridLayout()
 
-        Lab1=QLabel("用户名")
-        Lab2=QLabel("密码")
+        Lab1=QLabel("用户名:")
+        Lab2=QLabel("密 码:")
 
         self.Line1=QLineEdit()
         self.Line2=QLineEdit()
         self.Line3=QLineEdit()
 
-        OkB=QPushButton("确定")
-        CB =QPushButton("取消")
+        btn_confirm=QPushButton("&F确定")
+        btn_register=QPushButton("&R注册")
+        btn_cancel =QPushButton("&C取消")
 
-        lay.addRow(Lab1,self.Line1)
-        lay.addRow(Lab2,self.Line2)
-        lay.addRow(OkB, CB)
+        lay.addWidget(Lab1,0,0,1,1)
+        lay.addWidget(self.Line1,0,1,1,2)
+        lay.addWidget(Lab2,1,0,1,1)
+        lay.addWidget(self.Line2,1,1,1,2)
+        lay.addWidget(btn_confirm,2,0,1,1)
+        lay.addWidget(btn_register,2,1,1,1)
+        lay.addWidget(btn_cancel,2,2,1,1)
         self.setLayout(lay)
 
-        CB.clicked.connect(lambda :self.close())
-        OkB.clicked.connect(lambda :self.onLogin())
+        btn_cancel.clicked.connect(lambda :self.close())
+        btn_confirm.clicked.connect(lambda :self.onLogin())
+        btn_register.clicked.connect(lambda :self.onRegister())
 
     def onLogin(self):
         self.getNickName_Password()
@@ -47,10 +54,9 @@ class SignIn_GUI(QWidget):
         res = result[0].decode()
         print(res)
         if res == '登录成功':
-            from client.main import MainGUI
-            self.main_gui = MainGUI(self.udp_socket)
+            from client.main_gui import Main
+            self.main_gui = Main(self.udp_socket,self.nickname)
             self.main_gui.show()
-
             self.hide()
             # pass
 
@@ -62,8 +68,10 @@ class SignIn_GUI(QWidget):
                 ,'nickname':self.nickname
                 ,'password':self.password}
         data1 = json.dumps(data)
-        self.udp_socket.sendto(data1.encode(),self.addr)
+        print('in onRegister')
+        self.udp_socket.sendto(data1.encode(),server_addr)
         result = self.udp_socket.recvfrom(1024)
+        print('in onRegister1')
         print(result[0].decode())
 
     def getNickName_Password(self):
@@ -71,4 +79,5 @@ class SignIn_GUI(QWidget):
         self.password = getSha1(self.Line2.text())
 
 if __name__ == '__main__':
+    SignIn()
     pass
