@@ -9,6 +9,9 @@ class Worker:
         self.mysqlhelper = MySqlHelper('iroan','iroanMYS47','ssltools')
 
     def processMessage(self):
+        if self.data_from_client.get('event') == 'secret_chat':
+            self.secretChat()
+
         if self.data_from_client.get('event') == 'register':
             self.register()
 
@@ -21,6 +24,8 @@ class Worker:
         if self.data_from_client.get('event') == 'offline':
             self.offline()
 
+    def secretChat(self):
+        print('in secretChat')
     def offline(self):
         sql = 'update user set isOnline = %s where nickName = %s;'
         self.mysqlhelper.execute(sql, ['离线',self.data_from_client.get('nickname')])
@@ -57,10 +62,17 @@ class Worker:
             if res[0][0] != self.is_1_Flag:
                 sql = 'update user set isOnline = %s where nickName = %s;'
                 self.mysqlhelper.execute(sql, ['在线',self.data_from_client.get('nickname')])
+                self.updateUserLoginAddr(self.data_from_client.get('nickname')
+                                         ,self.client_addr)
                 response_client = '登录成功'
         else:
             response_client = '密码错误'
         self.udp_socket.sendto(response_client.encode(),self.client_addr)
+
+    def updateUserLoginAddr(self,nickname,addr):
+        print('in updateUserLoginAddr')
+        sql = 'update user set ip = %s, port = %s where nickName = %s;'
+        self.mysqlhelper.execute(sql, [addr[0],addr[1], nickname])
 
     def getUsers(self):
         sql = 'select nickName,trueName,department,isOnline from user;'

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 import json
 from socket import *
 from share.share import server_addr,sendData
+from .communication import CommWidget
 
 class Main(QMainWindow):
     def __init__(self,udp_socket,nickname,parent = None):
@@ -19,16 +20,18 @@ class Main(QMainWindow):
         self.action_quit.triggered.connect(self.close)
 
         self.setWindowTitle('SSLTools')
-        central_widget = CenterWidget(self.udp_socket)
+        central_widget = CenterWidget(self.udp_socket,self.nickname)
         self.setCentralWidget(central_widget)
 
     def onQuit(self):
         sendData(self.udp_socket,{'event': 'offline', 'nickname': self.nickname})
 
 class CenterWidget(QWidget):
-    def __init__(self,udp_socket,parent = None):
+    def __init__(self,udp_socket,own_nickname,parent = None):
         super(CenterWidget,self).__init__(parent)
         self.udp_socket = udp_socket
+        self.own_nickname = own_nickname
+
         sendData(self.udp_socket,{'event': 'get_all_users_info'})
         data, addr = self.udp_socket.recvfrom(1024)
         datafromserver = json.loads(data)
@@ -42,20 +45,7 @@ class CenterWidget(QWidget):
         hlay.addWidget(self.tree)
 
         vlay_main = QHBoxLayout()
-        vlay = QVBoxLayout()
-
-        history_text = QTextEdit()
-        input_text = QTextEdit()
-        history_label = QLabel('历史记录:')
-        input_label = QLabel('输入消息:')
-
-        vlay.addWidget(history_label)
-        vlay.addWidget(history_text)
-        vlay.addWidget(input_label)
-        vlay.addWidget(input_text)
-
         vlay_main.addLayout(hlay)
-        vlay_main.addLayout(vlay)
         self.setLayout(vlay_main)
 
         self.tree.clicked.connect(self.onItemClick)
@@ -63,8 +53,38 @@ class CenterWidget(QWidget):
         self.tree.activated.connect(self.onItemClick)
 
     def onItemClick(self):
+        '''
+        功能：判断用户点击的是一个用户item、还是一个组item
+            1. 是用户item就发送私密消息
+            2. 是组item就发送组消息
+        :return:
+        '''
         item = self.tree.currentItem()
-        print('key = %s,value = %s' %(item.text(0),item.text(1)))
+        print('key = %s,value = %s' % (item.text(0), item.text(1)))
+        item = self.tree.currentItem()
+        nickname = item.text(0)
+        self.comm = CommWidget(self.udp_socket,self.own_nickname,nickname)
+        self.comm.show()
+        # if '部' in nickname and name == '':
+        #     comm = CommWidget(self.udp_socket,nickname)
+        #     self.groupMessage(nickname)
+        # else:
+        #     self.userMessage(nickname)
+
+
+    def userMessage(self,peer_nickname,data):
+        '''
+        发送消息
+        1. 构造数据
+        2. 发送数据
+        '''
+        sendData(self.udp_socket,{'event': 'offline'
+                                 ,'nickname': self.nickname
+                                 ,'peer_nickname':peer_nickname
+                                 ,'data':data})
+
+    def groupMessage(self,peer_nickname):
+        pass
 
     def loads(self,data):
         '''加载数据：
