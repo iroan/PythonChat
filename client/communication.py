@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from share.share import packSendData
 from .ProcessRecv import ProcessRecv
 from share.share import server_addr
+
 class CommWidget(QWidget):
     '''
     功能：
@@ -11,13 +12,16 @@ class CommWidget(QWidget):
         2. 检测发送消息的事件
         3. 处理、显示从服务器接收到的信息
     '''
-    def __init__(self,udp_socket,own_nickname,peer_nickname,parent = None):
+
+    def __init__(self,udp_socket,own_nickname,peer_nickname,isSecretChat,parent = None):
         super(CommWidget,self).__init__(parent)
         self.udp_socket = udp_socket
         self.peer_nickname = peer_nickname
         self.own_nickname = own_nickname
-        self.setWindowTitle('与 '+ peer_nickname + ' 对话')
+        self.isSecretChat = isSecretChat
+        self.setWindowTitle(peer_nickname)
         self._gui()
+
         self.recv_thread = ProcessRecv(self.udp_socket)
         self.recv_thread.start()
         self.recv_thread.dataRecved.connect(self.recvMessage)
@@ -25,6 +29,8 @@ class CommWidget(QWidget):
     def recvMessage(self,data):
         if data.get('peer_nickname') == self.own_nickname and data.get('own_nickname') == self.peer_nickname:
             self.history_text.append(data.get('data') )
+        elif data.get('peer_nickname') == self.peer_nickname:
+            self.history_text.append(data.get('data'))
 
     def _gui(self):
         self.history_text = QTextEdit()
@@ -48,11 +54,18 @@ class CommWidget(QWidget):
         self.setLayout(self.vlay)
 
     def sendMessage(self):
-        print('in sendMessage')
-        data = {'event':'secret_chat'
+        if self.isSecretChat:
+            flag = 'secret_chat'
+        else:
+            flag = 'group_chat'
+
+        print('self.isSecretChat = ',self.isSecretChat )
+        print('flag = ',flag)
+        data = {'event':flag
                 ,'own_nickname':self.own_nickname
                 ,'peer_nickname':self.peer_nickname
                 ,'data':self.input_text.toPlainText()}
+
         self.input_text.clear()
         self.input_text.focusWidget()
         print('data=',data)

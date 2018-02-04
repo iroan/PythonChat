@@ -13,6 +13,9 @@ class Worker:
         if self.data_from_client.get('event') == 'secret_chat':
             self.secretChat()
 
+        if self.data_from_client.get('event') == 'group_chat':
+            self.groupChat()
+
         if self.data_from_client.get('event') == 'register':
             self.register()
 
@@ -25,6 +28,20 @@ class Worker:
         if self.data_from_client.get('event') == 'offline':
                 self.offline()
 
+    def groupChat(self): #TODO 后期要实现消息离线发送功能
+        '''
+        功能：
+            1. 获取peer_nickname的在线成员
+            2. 插入聊天记录
+            2. 获取peer_nickname的在线成员的addr
+            3. 获取peer_nickname的在线成员的转发消息
+        '''
+        sql = 'select ip,port from user where isOnline = %s and department = %s;'
+        addr = self.mysqlhelper.read_all(sql, ['在线',self.data_from_client.get('peer_nickname')])
+        self.insertMessageHistory(self.data_from_client)
+        for temp in addr:
+            packSendData(self.udp_socket, (temp[0],int(temp[1])), self.data_from_client)
+
     def secretChat(self):
         '''
         功能：
@@ -34,9 +51,11 @@ class Worker:
             2. 向message_history写入聊天记录
             3. 向peer_nickname转发信息
         '''
+        sql = 'select ip,port from user where nickName = %s;'
+        addr = self.mysqlhelper.read_all(sql, [self.data_from_client.get('peer_nickname')])
 
-        addr = self.getUserLoginAddr(self.data_from_client.get('peer_nickname'))
-        addr = (addr[0][0],int(addr[0][1]) )# addr是嵌套的元组，addr[0]才是有效地址
+        print('in secretChat addr=',addr)
+        addr = (addr[0][0],int(addr[0][1]))# addr是嵌套的元组，addr[0]才是有效地址
         if addr[0][0] == '' and addr[0][1] == '':
             data = {'event': 'secret_chat'
                 , 'peer_nickname': self.data_from_client.get('peer_nickname')
@@ -45,7 +64,6 @@ class Worker:
         else:
             self.insertMessageHistory(self.data_from_client)
             packSendData(self.udp_socket,addr,self.data_from_client)
-
 
     def insertMessageHistory(self,data):
         sql = 'insert into messagehistory(nickNameSend,nickNameRecv,sendTime,message) values(%s,%s,%s,%s);'
@@ -101,11 +119,6 @@ class Worker:
             response_client = '密码错误'
         self.udp_socket.sendto(response_client.encode(),self.client_addr)
 
-    def getUserLoginAddr(self,nickname):
-        sql = 'select ip,port from user where nickName = %s;'
-        res = self.mysqlhelper.read_all(sql,[nickname])
-        return res
-
     def updateUserLoginAddr(self,nickname,addr):
         sql = 'update user set ip = %s, port = %s where nickName = %s;'
         self.mysqlhelper.execute(sql, [addr[0],addr[1], nickname])
@@ -120,5 +133,11 @@ class Worker:
         self.udp_socket.sendto(response_client.encode(), self.client_addr)
 
 if __name__ == '__main__':
+
+    # 测试任意参数
+    def test(*params):
+        print(list[params])
+    test('wangk','cgr','123')
+
     pass
     # work = Worker('','','').getUsers()

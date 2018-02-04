@@ -62,15 +62,15 @@ class CenterWidget(QWidget):
         item = self.tree.currentItem()
         print('key = %s,value = %s' % (item.text(0), item.text(1)))
         item = self.tree.currentItem()
-        nickname = item.text(0)
-        self.comm = CommWidget(self.udp_socket,self.own_nickname,nickname)
+        isSecret = None
+        if '部' in item.text(0) and item.text(1) == '':
+            isSecret = False
+        elif item.text(0) == '其他':
+            isSecret = False
+        else:
+            isSecret = True
+        self.comm = CommWidget(self.udp_socket, self.own_nickname, item.text(0),isSecret)
         self.comm.show()
-        # if '部' in nickname and name == '':
-        #     comm = CommWidget(self.udp_socket,nickname)
-        #     self.groupMessage(nickname)
-        # else:
-        #     self.userMessage(nickname)
-
 
     def userMessage(self,peer_nickname,data):
         '''
