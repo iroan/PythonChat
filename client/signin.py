@@ -1,12 +1,12 @@
 from share.sha import getSha1
 import json
 from socket import *
-from share.share import server_addr,sendData
+from share.share import server_addr,packSendData
 from PyQt5.QtWidgets import *
 
 class SignIn(QWidget):
     def __del__(self):
-        sendData(self.udp_socket,{'event': 'offline', 'nickname': self.own_nickname})
+        packSendData(self.udp_socket,server_addr,{'event': 'offline', 'nickname': self.own_nickname})
         self.udp_socket.close()
 
     def __init__(self):

@@ -1,11 +1,9 @@
 import sys
 from PyQt5 import QtWidgets
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-import json
-from socket import *
-from share.share import server_addr,sendData
-
+from share.share import packSendData
+from .ProcessRecv import ProcessRecv
+from share.share import server_addr
 class CommWidget(QWidget):
     '''
     功能：
@@ -18,8 +16,15 @@ class CommWidget(QWidget):
         self.udp_socket = udp_socket
         self.peer_nickname = peer_nickname
         self.own_nickname = own_nickname
-        self.setWindowTitle('与-'+ peer_nickname + '-对话')
+        self.setWindowTitle('与 '+ peer_nickname + ' 对话')
         self._gui()
+        self.recv_thread = ProcessRecv(self.udp_socket)
+        self.recv_thread.start()
+        self.recv_thread.dataRecved.connect(self.recvMessage)
+
+    def recvMessage(self,data):
+        if data.get('peer_nickname') == self.own_nickname and data.get('own_nickname') == self.peer_nickname:
+            self.history_text.append(data.get('data') )
 
     def _gui(self):
         self.history_text = QTextEdit()
@@ -51,10 +56,11 @@ class CommWidget(QWidget):
         self.input_text.clear()
         self.input_text.focusWidget()
         print('data=',data)
-        sendData(self.udp_socket,data)
+        packSendData(self.udp_socket,server_addr,data)
 
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    comm = CommWidget('','' ,'')
-    comm.show()
-    sys.exit(app.exec_())
+    # app = QtWidgets.QApplication(sys.argv)
+    # comm = CommWidget('','' ,'')
+    # comm.show()
+    # sys.exit(app.exec_())
+    pass

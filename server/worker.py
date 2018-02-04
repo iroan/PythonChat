@@ -1,5 +1,6 @@
 from server.db import MySqlHelper
 import json
+from share.share import packSendData
 class Worker:
     def __init__(self,udp_socket,data_from_client,client_addr):
         self.udp_socket = udp_socket
@@ -22,10 +23,41 @@ class Worker:
             self.getUsers()
 
         if self.data_from_client.get('event') == 'offline':
-            self.offline()
+                self.offline()
 
     def secretChat(self):
-        print('in secretChat')
+        '''
+        功能：
+            1. 判断peer_nickname是否在线
+                在线获取address
+                不在线，回复own_nickname，对方不在线
+            2. 向message_history写入聊天记录
+            3. 向peer_nickname转发信息
+        '''
+
+        addr = self.getUserLoginAddr(self.data_from_client.get('peer_nickname'))
+        addr = (addr[0][0],int(addr[0][1]) )# addr是嵌套的元组，addr[0]才是有效地址
+        if addr[0][0] == '' and addr[0][1] == '':
+            data = {'event': 'secret_chat'
+                , 'peer_nickname': self.data_from_client.get('peer_nickname')
+                , 'data': '消息发送失败，'+ self.data_from_client.get('peer_nickname') +'不在线！'}
+            packSendData(self.udp_socket,self.client_addr,data)
+        else:
+            self.insertMessageHistory(self.data_from_client)
+            packSendData(self.udp_socket,addr,self.data_from_client)
+
+
+    def insertMessageHistory(self,data):
+        sql = 'insert into messagehistory(nickNameSend,nickNameRecv,sendTime,message) values(%s,%s,%s,%s);'
+        res = self.mysqlhelper.execute(sql,[data.get('own_nickname')
+            ,data.get('peer_nickname')
+            ,self.getTime()
+            ,data.get('data')])
+
+    def getTime(self):
+        import time
+        return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
     def offline(self):
         sql = 'update user set isOnline = %s where nickName = %s;'
         self.mysqlhelper.execute(sql, ['离线',self.data_from_client.get('nickname')])
@@ -69,8 +101,12 @@ class Worker:
             response_client = '密码错误'
         self.udp_socket.sendto(response_client.encode(),self.client_addr)
 
+    def getUserLoginAddr(self,nickname):
+        sql = 'select ip,port from user where nickName = %s;'
+        res = self.mysqlhelper.read_all(sql,[nickname])
+        return res
+
     def updateUserLoginAddr(self,nickname,addr):
-        print('in updateUserLoginAddr')
         sql = 'update user set ip = %s, port = %s where nickName = %s;'
         self.mysqlhelper.execute(sql, [addr[0],addr[1], nickname])
 

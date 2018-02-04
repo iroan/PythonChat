@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import json
 from socket import *
-from share.share import server_addr,sendData
+from share.share import server_addr,packSendData
 from .communication import CommWidget
 
 class Main(QMainWindow):
@@ -24,7 +24,7 @@ class Main(QMainWindow):
         self.setCentralWidget(central_widget)
 
     def onQuit(self):
-        sendData(self.udp_socket,{'event': 'offline', 'nickname': self.nickname})
+        packSendData(self.udp_socket,server_addr,{'event': 'offline', 'nickname': self.nickname})
 
 class CenterWidget(QWidget):
     def __init__(self,udp_socket,own_nickname,parent = None):
@@ -32,7 +32,7 @@ class CenterWidget(QWidget):
         self.udp_socket = udp_socket
         self.own_nickname = own_nickname
 
-        sendData(self.udp_socket,{'event': 'get_all_users_info'})
+        packSendData(self.udp_socket,server_addr,{'event': 'get_all_users_info'})
         data, addr = self.udp_socket.recvfrom(1024)
         datafromserver = json.loads(data)
 
@@ -78,7 +78,7 @@ class CenterWidget(QWidget):
         1. 构造数据
         2. 发送数据
         '''
-        sendData(self.udp_socket,{'event': 'offline'
+        packSendData(self.udp_socket,server_addr,{'event': 'offline'
                                  ,'nickname': self.nickname
                                  ,'peer_nickname':peer_nickname
                                  ,'data':data})
