@@ -10,5 +10,6 @@ class ProcessRecv(QThread):
     def run(self):
         while True:
             recv_date,addr = self.udp_socket.recvfrom(1024)
-            self.dataRecved.emit(json.loads(recv_date))
+            data = json.loads(recv_date)
+            self.dataRecved.emit(data)
 

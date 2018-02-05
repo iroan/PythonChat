@@ -13,7 +13,7 @@ class CommWidget(QWidget):
         3. 处理、显示从服务器接收到的信息
     '''
 
-    def __init__(self,udp_socket,own_nickname,peer_nickname,isSecretChat,parent = None):
+    def __init__(self,udp_socket,own_nickname,peer_nickname,isSecretChat = None,parent = None):
         super(CommWidget,self).__init__(parent)
         self.udp_socket = udp_socket
         self.peer_nickname = peer_nickname
@@ -58,14 +58,10 @@ class CommWidget(QWidget):
             flag = 'secret_chat'
         else:
             flag = 'group_chat'
-
-        print('self.isSecretChat = ',self.isSecretChat )
-        print('flag = ',flag)
         data = {'event':flag
                 ,'own_nickname':self.own_nickname
                 ,'peer_nickname':self.peer_nickname
                 ,'data':self.input_text.toPlainText()}
-
         self.input_text.clear()
         self.input_text.focusWidget()
         print('data=',data)

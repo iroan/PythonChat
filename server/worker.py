@@ -10,6 +10,9 @@ class Worker:
         self.mysqlhelper = MySqlHelper('iroan','iroanMYS47','ssltools')
 
     def processMessage(self):
+        if self.data_from_client.get('event') == 'broadcast':
+            self.broadCast()
+
         if self.data_from_client.get('event') == 'secret_chat':
             self.secretChat()
 
@@ -38,6 +41,13 @@ class Worker:
         '''
         sql = 'select ip,port from user where isOnline = %s and department = %s;'
         addr = self.mysqlhelper.read_all(sql, ['在线',self.data_from_client.get('peer_nickname')])
+        self.insertMessageHistory(self.data_from_client)
+        for temp in addr:
+            packSendData(self.udp_socket, (temp[0],int(temp[1])), self.data_from_client)
+
+    def broadCast(self):
+        sql = 'select ip,port from user where isOnline = %s;'
+        addr = self.mysqlhelper.read_all(sql, ['在线'])
         self.insertMessageHistory(self.data_from_client)
         for temp in addr:
             packSendData(self.udp_socket, (temp[0],int(temp[1])), self.data_from_client)
@@ -106,7 +116,7 @@ class Worker:
         if res == ():
             response_client = '该用户未注册'
 
-        if self.data_from_client.get('password') == res[0][1]:
+        elif self.data_from_client.get('password') == res[0][1]:
             if res[0][0] == self.is_1_Flag:
                 response_client = '该用户已登录，不能重复登录' # TODO 需要支持重复登录吗？
             if res[0][0] != self.is_1_Flag:
