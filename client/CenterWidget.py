@@ -13,17 +13,17 @@ class CenterWidget(QWidget):
         data, addr = self.udp_socket.recvfrom(1024)
         datafromserver = json.loads(data)
 
-        hlay = QHBoxLayout()
+        hlay = QVBoxLayout()
         self.tree = QTreeWidget() # 设置列数
         self.tree.setColumnCount(2)
         self.tree.setHeaderLabels(['昵称', '姓名', '状态']) # 设置头的标题
-        self.loads(datafromserver.get('data'))
-
+        temp = self.loads(datafromserver.get('data'))
+        str = '在线人数:'+repr(temp[0])+'  离线人数:'+repr(temp[1])+'  总人数:'+repr(temp[2])
+        self.lab = QLabel(str)
+        hlay.addWidget(self.lab)
         hlay.addWidget(self.tree)
 
-        vlay_main = QHBoxLayout()
-        vlay_main.addLayout(hlay)
-        self.setLayout(vlay_main)
+        self.setLayout(hlay)
 
         self.tree.clicked.connect(self.onItemClick)
         self.tree.activated.connect(self.onItemClick)
@@ -75,6 +75,11 @@ class CenterWidget(QWidget):
 
         '''获取部门信息'''
         parents = set() # 集合，用于保存部门名称
+
+        all_user = len(data)
+        online_user = 0
+        offline_user = 0
+
         for row_date in data: # 遍历每一行数据（一个用户的数据）
             # print(row_date)
             parents.add(row_date[2])
@@ -93,3 +98,8 @@ class CenterWidget(QWidget):
                     root.setText(0, row_date[0])
                     root.setText(1, row_date[1])
                     root.setText(2, row_date[3])
+                    if row_date[3] == '在线':
+                        online_user = online_user + 1
+                    elif row_date[3] == '离线':
+                       offline_user = offline_user + 1
+        return (online_user,offline_user,all_user)
