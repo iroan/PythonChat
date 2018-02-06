@@ -29,9 +29,10 @@ class Main(QMainWindow):
 
     def setMenuView(self):
         self.menu_view = self.menuBar().addMenu('查看')
-        self.action_view_history = QAction('通讯历史', self.menu_view)
+        self.action_view_history = QAction('聊天记录', self.menu_view)
         self.menu_view.addAction(self.action_view_history)
         self.action_view_history.triggered.connect(self.onViewChatHistory)
+        #TODO 修改个人信息
 
     def setMenuChat(self):
         self.menu_chat = self.menuBar().addMenu('通讯')
