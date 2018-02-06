@@ -4,6 +4,7 @@ from share.share import server_addr,packSendData
 from .CenterWidget import CenterWidget
 from .BroadCast import BroadCast
 from .ViewChatHistory import ViewChatHistory
+from .FeedbackHelp import FeedbackHelp
 
 class Main(QMainWindow):
     def __init__(self,udp_socket,nickname,parent = None):
@@ -17,7 +18,14 @@ class Main(QMainWindow):
 
         self.setMenuChat()
         self.setMenuView()
+        self.setMenuAbout()
 
+
+    def setMenuAbout(self):
+        self.menu_about = self.menuBar().addMenu('关于')
+        self.action_about_help = QAction('反馈与帮助', self.menu_about)
+        self.menu_about.addAction(self.action_about_help )
+        self.action_about_help.triggered.connect(self.onFeedbackHelp)
 
     def setMenuView(self):
         self.menu_view = self.menuBar().addMenu('查看')
@@ -54,3 +62,7 @@ class Main(QMainWindow):
     def onViewChatHistory(self):
         self.chat_history= ViewChatHistory(self.udp_socket, self.own_nickname)
         self.chat_history.show()
+
+    def onFeedbackHelp(self):
+        self.feedback_help = FeedbackHelp()
+        self.feedback_help.show()
