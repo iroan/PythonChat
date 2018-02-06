@@ -1,7 +1,5 @@
 import sys
 sys.path.append('H:\Project\PythonChat')
-from socket import *
-from share.share import server_addr
 import sys
 from PyQt5 import QtWidgets
 from client.signin import SignIn

@@ -8,7 +8,6 @@ class SignIn(QWidget):
     def __del__(self):
         packSendData(self.udp_socket,server_addr,{'event': 'offline', 'nickname': self.own_nickname})
         pass
-        # self.udp_socket.close()
 
     def __init__(self):
         super().__init__()

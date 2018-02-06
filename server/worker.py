@@ -10,6 +10,9 @@ class Worker:
         self.mysqlhelper = MySqlHelper('iroan','iroanMYS47','ssltools')
 
     def processMessage(self):
+        if self.data_from_client.get('event') == 'get_history':
+            self.getHistory()
+
         if self.data_from_client.get('event') == 'broadcast':
             self.broadCast()
 
@@ -44,6 +47,13 @@ class Worker:
         self.insertMessageHistory(self.data_from_client)
         for temp in addr:
             packSendData(self.udp_socket, (temp[0],int(temp[1])), self.data_from_client)
+
+    def getHistory(self):
+        sql = 'select nickNameSend,nickNameRecv,sendTime,message from messagehistory where nickNameSend = %s or nickNameRecv = %s;'
+        data = self.mysqlhelper.read_all(sql, [self.data_from_client.get('own_nickname')
+                                           ,self.data_from_client.get('own_nickname')])
+        packSendData(self.udp_socket,self.client_addr, data)
+
 
     def broadCast(self):
         sql = 'select ip,port from user where isOnline = %s;'
@@ -112,7 +122,6 @@ class Worker:
         res = self.mysqlhelper.read_all(sql,[self.data_from_client.get('nickname')]) # TODO isOnline要设置默认值离线
         # 'navicat 设置索引中的名是什么意思、有什么作用'
         response_client = ''
-        print('res=',res)
         if res == ():
             response_client = '该用户未注册'
 
@@ -136,10 +145,8 @@ class Worker:
     def getUsers(self):
         sql = 'select nickName,trueName,department,isOnline from user;'
         data = self.mysqlhelper.read_all(sql)
-        print('data =\n',data)
         response_client = json.dumps({'event':'sol'
                                          ,'data':data})
-        print('response_client =\n',response_client)
         self.udp_socket.sendto(response_client.encode(), self.client_addr)
 
 if __name__ == '__main__':

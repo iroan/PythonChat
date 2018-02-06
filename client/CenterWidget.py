@@ -26,7 +26,6 @@ class CenterWidget(QWidget):
         self.setLayout(vlay_main)
 
         self.tree.clicked.connect(self.onItemClick)
-        # self.tree.pressed.connect(self.onItemClick)
         self.tree.activated.connect(self.onItemClick)
 
     def onItemClick(self):
@@ -37,7 +36,6 @@ class CenterWidget(QWidget):
         :return:
         '''
         item = self.tree.currentItem()
-        print('key = %s,value = %s' % (item.text(0), item.text(1)))
         item = self.tree.currentItem()
         isSecret = None
         if '部' in item.text(0) and item.text(1) == '':
@@ -78,7 +76,7 @@ class CenterWidget(QWidget):
         '''获取部门信息'''
         parents = set() # 集合，用于保存部门名称
         for row_date in data: # 遍历每一行数据（一个用户的数据）
-            print(row_date)
+            # print(row_date)
             parents.add(row_date[2])
 
         '''新建部门item'''

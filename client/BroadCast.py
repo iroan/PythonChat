@@ -15,9 +15,8 @@ class BroadCast(QWidget):
             super(BroadCast, self).__init__(parent)
             self.udp_socket = udp_socket
             self.own_nickname = own_nickname
-            self.setWindowTitle('BroadCast')
+            self.setWindowTitle('广播')
             self._gui()
-            print('in self._gui()')
             self.recv_thread = ProcessRecv(self.udp_socket)
             self.recv_thread.start()
             self.recv_thread.dataRecved.connect(self.recvMessage)

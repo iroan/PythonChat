@@ -10,17 +10,26 @@ worker类：
 from socket import *
 from share import share
 import json
+from threading import Thread
 
-def Main():
-    udp_sock = socket(AF_INET,SOCK_DGRAM)
-    udp_sock.bind(('',share.server_addr[1]))
+class Main:
+    def __init__(self):
+        self.udp_sock = socket(AF_INET, SOCK_DGRAM)
+        self.udp_sock.bind(('', share.server_addr[1]))
+        while True:
+            try:
+                self.recv_date,self.client_addr = self.udp_sock.recvfrom(1024)
+                thread = Thread(target=self.work)
+                thread.start()
+                thread.join()
+            except ConnectionRefusedError as e:
+                print('一个客户端端口连接,',e)
 
-    while True:
-        recv_date,client_addr = udp_sock.recvfrom(1024)
-        data = json.loads(recv_date)
+    def work(self):
+        data = json.loads(self.recv_date)
         print('date from client=',data)
         from server.worker import Worker
-        Worker(udp_sock,data,client_addr).processMessage()
+        Worker(self.udp_sock,data,self.client_addr).processMessage()
 
 if __name__ == '__main__':
     Main()

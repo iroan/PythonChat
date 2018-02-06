@@ -11,6 +11,10 @@ def packSendData(udp_socket,addr,data_sendto_server):
         3. event
         4. message
     '''
+    print('udp_socket = ',udp_socket)
+    print('addr = ',addr)
+    print('data_sendto_server= ',data_sendto_server)
+
     send_data = json.dumps(data_sendto_server)
     udp_socket.sendto(send_data.encode(), addr)
 

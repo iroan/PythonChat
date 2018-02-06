@@ -20,7 +20,11 @@ Client处理通信的线程功能是：
 
 # 反思的地方
 1. 实现某个功能的几行代码有时不知道重构为一个函数
+2. socket发送udp信息时，要确保addr有效（ip主机的port端口已打开）
 
 # 遇到的错误
 1. ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有的连接。
-原因：socket在使用之前已经关闭了
+原因：
+1. socket在使用之前已经关闭了
+2. addr不可用
+
