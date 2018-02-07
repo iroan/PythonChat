@@ -4,3 +4,11 @@
 2018-02-08 02:50:12,950 - server - DEBUG - server.py:30{'event': 'alter_own_info', 'own_nickname': 'iroan', 'changed_words': 'introduce', 'data': '有所不为，才能有所为'}
 2018-02-08 02:50:12,969 - client - DEBUG - client/ViewOwnInfo.py:19	{'event': 'alter_own_info', 'own_nickname': 'iroan', 'status': '修改成功'}
 2018-02-08 02:50:36,170 - server - DEBUG - server.py:30{'event': 'offline', 'nickname': 'iroan'}
+2018-02-08 02:58:47,550 - server - DEBUG - server.py:30{'event': 'signin', 'nickname': 'kaijun', 'password': 'f8ff0bd30a135c58cf8a7ee20af81a00fbada71f'}
+2018-02-08 02:58:47,665 - client - DEBUG - 登录成功
+2018-02-08 02:58:47,679 - server - DEBUG - server.py:30{'event': 'get_all_users_info'}
+2018-02-08 02:58:49,813 - server - DEBUG - server.py:30{'event': 'get_own_info', 'own_nickname': 'kaijun'}
+2018-02-08 02:58:49,830 - client - DEBUG - client/ViewOwnInfo.py:19	{'data': [['kaijun', '王凯军', '男性', '技术部', '前段工程师', '吃饭、睡觉、做闲事', None, None]], 'event': 'get_own_info'}
+2018-02-08 02:58:59,852 - server - DEBUG - server.py:30{'event': 'alter_own_info', 'own_nickname': 'kaijun', 'changed_words': 'position', 'data': '全栈工程师'}
+2018-02-08 02:58:59,872 - client - DEBUG - client/ViewOwnInfo.py:19	{'event': 'alter_own_info', 'own_nickname': 'kaijun', 'status': '修改成功'}
+2018-02-08 02:59:04,745 - server - DEBUG - server.py:30{'event': 'offline', 'nickname': 'kaijun'}
