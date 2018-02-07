@@ -11,6 +11,12 @@ class Worker:
         self.mysqlhelper = MySqlHelper('iroan','iroanMYS47','ssltools')
 
     def processMessage(self):
+        if self.data_from_client.get('event') == 'alter_own_info':
+            self.alterOwnInfo()
+
+        if self.data_from_client.get('event') == 'get_own_info':
+            self.getOwnInfo()
+
         if self.data_from_client.get('event') == 'get_history':
             self.getHistory()
 
@@ -49,12 +55,49 @@ class Worker:
         for temp in addr:
             packSendData(self.udp_socket, (temp[0],int(temp[1])), self.data_from_client)
 
+    def alterOwnInfo(self):
+        data = self.data_from_client
+        changed_words = data.get('changed_words')
+        if changed_words == 'nickName':
+            sql = 'update user set nickName = %s where nickName = %s;'
+        elif changed_words == 'trueName':
+            sql = 'update user set trueName = %s where nickName = %s;'
+        elif changed_words == 'gender':
+            sql = 'update user set gender = %s where nickName = %s;'
+        elif changed_words == 'department':
+            sql = 'update user set department = %s where nickName = %s;'
+        elif changed_words == 'position':
+            sql = 'update user set position = %s where nickName = %s;'
+        elif changed_words == 'introduce':
+            sql = 'update user set introduce = %s where nickName = %s;'
+        elif changed_words == 'email':
+            sql = 'update user set email = %s where nickName = %s;'
+        elif changed_words == 'phone':
+            sql = 'update user set phone = %s where nickName = %s;'
+        res = self.mysqlhelper.execute(sql, [data.get('data'),data.get('own_nickname')])
+        status = ''
+        if res == 0:
+            status = '修改失败'
+        elif res == 1:
+            status = '修改成功'
+        packSendData(self.udp_socket, self.client_addr, {'event': 'alter_own_info',
+                                                         'own_nickname': data.get('own_nickname'),
+                                                         'status': status})
+
+    def getOwnInfo(self):
+        sql = 'select nickName,trueName,gender,department,position,introduce,email,phone ' \
+              'from user where nickName = %s;'
+        data = self.mysqlhelper.read_all(sql, [self.data_from_client.get('own_nickname')])
+
+        packSendData(self.udp_socket,self.client_addr, {'data':data,
+                                                        'event':'get_own_info'})
+
     def getHistory(self):
-        sql = 'select nickNameSend,nickNameRecv,sendTime,message from messagehistory where nickNameSend = %s or nickNameRecv = %s;'
+        sql = 'select nickNameSend,nickNameRecv,sendTime,message ' \
+              'from messagehistory where nickNameSend = %s or nickNameRecv = %s;'
         data = self.mysqlhelper.read_all(sql, [self.data_from_client.get('own_nickname')
                                            ,self.data_from_client.get('own_nickname')])
         packSendData(self.udp_socket,self.client_addr, data)
-
 
     def broadCast(self):
         sql = 'select ip,port from user where isOnline = %s;'

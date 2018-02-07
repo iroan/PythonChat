@@ -4,7 +4,7 @@ from socket import *
 from share.share import server_addr,packSendData
 from PyQt5.QtWidgets import *
 from share.log import logger_client
-class SignIn(QWidget):
+class Login(QWidget):
     def __del__(self):
         packSendData(self.udp_socket,server_addr,{'event': 'offline', 'nickname': self.own_nickname})
         pass
@@ -54,8 +54,8 @@ class SignIn(QWidget):
         res = result[0].decode()
         logger_client.debug(res)
         if res == '登录成功':
-            from client.main_gui import Main
-            self.main_gui = Main(self.udp_socket,self.nickname)
+            from client.MainWindow import MainWindow
+            self.main_gui = MainWindow(self.udp_socket, self.nickname)
             self.main_gui.show()
             self.hide()
             # pass
@@ -78,6 +78,6 @@ class SignIn(QWidget):
         self.password = getSha1(self.Line2.text())
 
 if __name__ == '__main__':
-    SignIn()
+    Login()
 
     pass

@@ -5,10 +5,10 @@ from .CenterWidget import CenterWidget
 from .BroadCast import BroadCast
 from .ViewChatHistory import ViewChatHistory
 from .FeedbackHelp import FeedbackHelp
-
-class Main(QMainWindow):
+from .ViewOwnInfo import ViewOwnInfo
+class MainWindow(QMainWindow):
     def __init__(self,udp_socket,nickname,parent = None):
-        super(Main, self).__init__(parent)
+        super(MainWindow, self).__init__(parent)
         self.udp_socket = udp_socket
         self.own_nickname = nickname
         self.setWindowTitle('SSLTools')
@@ -29,10 +29,15 @@ class Main(QMainWindow):
 
     def setMenuView(self):
         self.menu_view = self.menuBar().addMenu('查看')
+
         self.action_view_history = QAction('聊天记录', self.menu_view)
         self.menu_view.addAction(self.action_view_history)
         self.action_view_history.triggered.connect(self.onViewChatHistory)
-        #TODO 修改个人信息
+
+        self.action_view_owninfo = QAction('个人信息', self.menu_view)
+        self.menu_view.addAction(self.action_view_owninfo)
+        self.action_view_owninfo.triggered.connect(self.onViewOwnInfo)
+
 
     def setMenuChat(self):
         self.menu_chat = self.menuBar().addMenu('通讯')
@@ -59,6 +64,10 @@ class Main(QMainWindow):
     def onBroadCast(self):
         self.broadcast = BroadCast(self.udp_socket, self.own_nickname)
         self.broadcast.show()
+
+    def onViewOwnInfo(self):
+        self.view_own_info = ViewOwnInfo(self.udp_socket, self.own_nickname)
+        self.view_own_info.show()
 
     def onViewChatHistory(self):
         self.chat_history= ViewChatHistory(self.udp_socket, self.own_nickname)
