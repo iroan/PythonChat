@@ -1,4 +1,0 @@
-Alias|English Intetpret|中文解释|Usage
-sol|show online user|显示在线用户|>>>sol
-soi|show own info|显示个人信息|>>>soi
-sch|show chat history|显示聊天历史|>>>sch

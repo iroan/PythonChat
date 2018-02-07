@@ -3,7 +3,7 @@ import json
 from socket import *
 from share.share import server_addr,packSendData
 from PyQt5.QtWidgets import *
-
+from share.log import logger_client
 class SignIn(QWidget):
     def __del__(self):
         packSendData(self.udp_socket,server_addr,{'event': 'offline', 'nickname': self.own_nickname})
@@ -52,7 +52,7 @@ class SignIn(QWidget):
         self.udp_socket.sendto(data1.encode(),server_addr)
         result = self.udp_socket.recvfrom(1024)
         res = result[0].decode()
-        print(res)
+        logger_client.debug(res)
         if res == '登录成功':
             from client.main_gui import Main
             self.main_gui = Main(self.udp_socket,self.nickname)
@@ -61,18 +61,17 @@ class SignIn(QWidget):
             # pass
 
     # TODO 登录界面刚开始只显示登录按钮，若发现为注册，再显示登录按钮
-    # 注册之后要提醒登录
     def onRegister(self):
         self.getNickName_Password()
         data = {'event':'register'
                 ,'nickname':self.nickname
                 ,'password':self.password}
         data1 = json.dumps(data)
-        print('in onRegister')
         self.udp_socket.sendto(data1.encode(),server_addr)
-        result = self.udp_socket.recvfrom(1024)
-        print('in onRegister1')
-        print(result[0].decode())
+        result,useless = self.udp_socket.recvfrom(1024)
+        logger_client.debug(str(result.decode()))
+        QMessageBox(text=result.decode()).exec()
+
 
     def getNickName_Password(self):
         self.nickname = self.Line1.text()
@@ -80,4 +79,5 @@ class SignIn(QWidget):
 
 if __name__ == '__main__':
     SignIn()
+
     pass

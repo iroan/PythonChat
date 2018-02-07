@@ -1,0 +1,5 @@
+2018-02-07 20:43:18,064 - client - DEBUG - debug message
+2018-02-07 20:43:18,064 - client - INFO - info message
+2018-02-07 20:43:18,064 - client - WARNING - warn message
+2018-02-07 20:43:18,064 - client - ERROR - error message
+2018-02-07 20:43:18,064 - client - CRITICAL - critical message

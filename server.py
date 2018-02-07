@@ -11,7 +11,7 @@ from socket import *
 from share import share
 import json
 from threading import Thread
-
+from share.log import logger_server
 class Main:
     def __init__(self):
         self.udp_sock = socket(AF_INET, SOCK_DGRAM)
@@ -23,11 +23,11 @@ class Main:
                 thread.start()
                 thread.join()
             except ConnectionRefusedError as e:
-                print('一个客户端端口连接,',e)
+                logger_server.error('server.py:26' + str(e))
 
     def work(self):
         data = json.loads(self.recv_date)
-        print('date from client=',data)
+        logger_server.debug('server.py:30' + str(data))
         from server.worker import Worker
         Worker(self.udp_sock,data,self.client_addr).processMessage()
 
