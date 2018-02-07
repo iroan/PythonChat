@@ -1,6 +1,7 @@
 from server.db import MySqlHelper
 import json
 from share.share import packSendData
+from share.log import logger_server
 class Worker:
     def __init__(self,udp_socket,data_from_client,client_addr):
         self.udp_socket = udp_socket
@@ -74,7 +75,6 @@ class Worker:
         sql = 'select ip,port from user where nickName = %s;'
         addr = self.mysqlhelper.read_all(sql, [self.data_from_client.get('peer_nickname')])
 
-        print('in secretChat addr=',addr)
         addr = (addr[0][0],int(addr[0][1]))# addr是嵌套的元组，addr[0]才是有效地址
         if addr[0][0] == '' and addr[0][1] == '':
             data = {'event': 'secret_chat'
@@ -107,14 +107,15 @@ class Worker:
         res = self.mysqlhelper.execute(sql
                                        , [self.data_from_client.get('nickname')
                                                     ,self.data_from_client.get('password')])
-        print('response_client ')
         response_client = ''
         if res == 0:
             response_client = '注册失败-因为该昵称已经被使用，请换一个昵称注册'
+            logger_server.info(response_client)
         elif res == 1:
             response_client = '注册成功，请登录使用'
         else:
             response_client = '注册失败-程序错误'
+            logger_server.error(response_client)
         self.udp_socket.sendto(response_client.encode(),self.client_addr)
 
     def signin(self):
@@ -124,10 +125,12 @@ class Worker:
         response_client = ''
         if res == ():
             response_client = '该用户未注册'
+            logger_server.info(response_client)
 
         elif self.data_from_client.get('password') == res[0][1]:
             if res[0][0] == self.is_1_Flag:
                 response_client = '该用户已登录，不能重复登录' # TODO 需要支持重复登录吗？
+                logger_server.info(response_client)
             if res[0][0] != self.is_1_Flag:
                 sql = 'update user set isOnline = %s where nickName = %s;'
                 self.mysqlhelper.execute(sql, ['在线',self.data_from_client.get('nickname')])
@@ -136,6 +139,7 @@ class Worker:
                 response_client = '登录成功'
         else:
             response_client = '密码错误'
+            logger_server.error(response_client)
         self.udp_socket.sendto(response_client.encode(),self.client_addr)
 
     def updateUserLoginAddr(self,nickname,addr):

@@ -12,7 +12,7 @@ class FeedbackHelp(QWidget):
         text.append('如果有任何关于该软件使用、环境配置、源码求助等问题,有以下两种方式联系到作者：')
         text.append('   1. 发送邮件，邮箱地址：2654189525@qq.com')
         text.append('   2. 发布Issue，地址：https://github.com/iroan/PythonChat/issues')
-        text.append('\n欢迎打扰！！！')
+        text.append('\n欢迎骚扰！！！')
         hlay.addWidget(text)
         self.setLayout(hlay)
 

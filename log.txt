@@ -43,3 +43,9 @@
 2018-02-08 00:37:57,977 - client - DEBUG - 登录成功
 2018-02-08 00:37:58,005 - server - DEBUG - server.py:30{'event': 'get_all_users_info'}
 2018-02-08 00:38:06,442 - server - DEBUG - server.py:30{'event': 'offline', 'nickname': '12'}
+2018-02-08 00:52:36,111 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '13', 'password': 'bd307a3ec329e10a2cff8fb87480823da114f8f4'}
+2018-02-08 00:52:36,281 - client - DEBUG - 注册成功，请登录使用
+2018-02-08 00:52:39,222 - server - DEBUG - server.py:30{'event': 'signin', 'nickname': '13', 'password': 'bd307a3ec329e10a2cff8fb87480823da114f8f4'}
+2018-02-08 00:52:39,263 - client - DEBUG - 登录成功
+2018-02-08 00:52:39,300 - server - DEBUG - server.py:30{'event': 'get_all_users_info'}
+2018-02-08 00:52:42,006 - server - DEBUG - server.py:30{'event': 'offline', 'nickname': '13'}

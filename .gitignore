@@ -105,3 +105,4 @@ venv.bak/
 *.ui
 .pyc
 .idea/workspace.xml
+log.txt
