@@ -1,0 +1,45 @@
+2018-02-07 23:50:14,949 - client - DEBUG - 登录成功
+2018-02-08 00:00:33,709 - server - DEBUG - b'{"event": "signin", "nickname": "9", "password": "0ade7c2cf97f75d009975f4d720d1fa6c19f4897"}'
+2018-02-08 00:00:33,812 - client - DEBUG - 登录成功
+2018-02-08 00:00:33,818 - server - DEBUG - b'{"event": "get_all_users_info"}'
+2018-02-08 00:01:44,748 - server - DEBUG - b'{"event": "offline", "nickname": "9"}'
+2018-02-08 00:02:37,987 - server - DEBUG - in Mainb'{"event": "signin", "nickname": "9", "password": "0ade7c2cf97f75d009975f4d720d1fa6c19f4897"}'
+2018-02-08 00:02:38,145 - client - DEBUG - 登录成功
+2018-02-08 00:02:38,152 - server - DEBUG - in Mainb'{"event": "get_all_users_info"}'
+2018-02-08 00:02:43,041 - server - DEBUG - in Mainb'{"event": "get_history", "own_nickname": "9"}'
+2018-02-08 00:05:10,921 - server - DEBUG - in Main{'event': 'signin', 'nickname': '9', 'password': '0ade7c2cf97f75d009975f4d720d1fa6c19f4897'}
+2018-02-08 00:05:11,040 - client - DEBUG - 该用户已登录，不能重复登录
+2018-02-08 00:05:15,691 - server - DEBUG - in Main{'event': 'signin', 'nickname': '9', 'password': '0ade7c2cf97f75d009975f4d720d1fa6c19f4897'}
+2018-02-08 00:05:15,703 - client - DEBUG - 该用户已登录，不能重复登录
+2018-02-08 00:06:08,297 - server - DEBUG - in Main{'event': 'signin', 'nickname': '8', 'password': 'fe5dbbcea5ce7e2988b8c69bcfdfde8904aabc1f'}
+2018-02-08 00:06:08,323 - client - DEBUG - 登录成功
+2018-02-08 00:06:08,329 - server - DEBUG - in Main{'event': 'get_all_users_info'}
+2018-02-08 00:06:17,862 - server - DEBUG - in Main{'event': 'broadcast', 'own_nickname': '8', 'peer_nickname': 'broadcast', 'data': '我哦来了'}
+2018-02-08 00:21:57,490 - server - DEBUG - server.py:30{'event': 'signin', 'nickname': '3', 'password': '77de68daecd823babbb58edb1c8e14d7106e83bb'}
+2018-02-08 00:21:57,617 - client - DEBUG - 该用户未注册
+2018-02-08 00:22:07,865 - server - DEBUG - server.py:30{'event': 'signin', 'nickname': '3', 'password': '77de68daecd823babbb58edb1c8e14d7106e83bb'}
+2018-02-08 00:22:07,872 - client - DEBUG - 该用户未注册
+2018-02-08 00:22:29,261 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '3', 'password': '77de68daecd823babbb58edb1c8e14d7106e83bb'}
+2018-02-08 00:22:37,134 - server - DEBUG - server.py:30{'event': 'signin', 'nickname': '3', 'password': '77de68daecd823babbb58edb1c8e14d7106e83bb'}
+2018-02-08 00:22:37,171 - client - DEBUG - 登录成功
+2018-02-08 00:22:37,177 - server - DEBUG - server.py:30{'event': 'get_all_users_info'}
+2018-02-08 00:22:47,432 - server - DEBUG - server.py:30{'event': 'offline', 'nickname': '3'}
+2018-02-08 00:23:05,598 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '4', 'password': '1b6453892473a467d07372d45eb05abc2031647a'}
+2018-02-08 00:27:04,452 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '10', 'password': 'b1d5781111d84f7b3fe45a0852e59758cd7a87e5'}
+2018-02-08 00:28:25,744 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '11', 'password': '17ba0791499db908433b80f37c5fbc89b870084b'}
+2018-02-08 00:28:25,758 - client - DEBUG - (b'\xe6\xb3\xa8\xe5\x86\x8c\xe6\x88\x90\xe5\x8a\x9f\xef\xbc\x8c\xe8\xaf\xb7\xe7\x99\xbb\xe5\xbd\x95\xe4\xbd\xbf\xe7\x94\xa8', ('127.0.0.1', 11000))
+2018-02-08 00:29:20,195 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '12', 'password': '7b52009b64fd0a2a49e6d8a939753077792b0554'}
+2018-02-08 00:30:05,820 - server - DEBUG - server.py:30{'event': 'signin', 'nickname': '12', 'password': '7b52009b64fd0a2a49e6d8a939753077792b0554'}
+2018-02-08 00:30:05,887 - client - DEBUG - 登录成功
+2018-02-08 00:30:05,904 - server - DEBUG - server.py:30{'event': 'get_all_users_info'}
+2018-02-08 00:30:25,800 - server - DEBUG - server.py:30{'event': 'offline', 'nickname': '12'}
+2018-02-08 00:32:16,160 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '13', 'password': 'bd307a3ec329e10a2cff8fb87480823da114f8f4'}
+2018-02-08 00:33:59,104 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '14', 'password': 'fa35e192121eabf3dabf9f5ea6abdbcbc107ac3b'}
+2018-02-08 00:34:16,862 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '15', 'password': 'f1abd670358e036c31296e66b3b66c382ac00812'}
+2018-02-08 00:34:59,583 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '11', 'password': '17ba0791499db908433b80f37c5fbc89b870084b'}
+2018-02-08 00:37:55,137 - server - DEBUG - server.py:30{'event': 'register', 'nickname': '12', 'password': '7b52009b64fd0a2a49e6d8a939753077792b0554'}
+2018-02-08 00:37:55,162 - client - DEBUG - 注册成功，请登录使用
+2018-02-08 00:37:57,911 - server - DEBUG - server.py:30{'event': 'signin', 'nickname': '12', 'password': '7b52009b64fd0a2a49e6d8a939753077792b0554'}
+2018-02-08 00:37:57,977 - client - DEBUG - 登录成功
+2018-02-08 00:37:58,005 - server - DEBUG - server.py:30{'event': 'get_all_users_info'}
+2018-02-08 00:38:06,442 - server - DEBUG - server.py:30{'event': 'offline', 'nickname': '12'}
