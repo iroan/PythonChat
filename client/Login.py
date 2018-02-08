@@ -24,7 +24,7 @@ class Login(QWidget):
 
         self.Line1=QLineEdit()
         self.Line2=QLineEdit()
-        self.Line3=QLineEdit()
+        self.Line2.setEchoMode(QLineEdit.Password)
 
         btn_confirm=QPushButton("&F确定")
         btn_register=QPushButton("&R注册")
