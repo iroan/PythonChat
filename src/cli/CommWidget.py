@@ -1,9 +1,7 @@
-import sys
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import *
-from share.share import packSendData
+from PyQt5.QtWidgets import QWidget,QTextEdit,QLabel,QPushButton,QVBoxLayout
+from com.share import packSendData
 from .ProcessRecv import ProcessRecv
-from share.share import server_addr
+from com.share import server_addr
 
 class CommWidget(QWidget):
     '''

@@ -1,4 +1,0 @@
-DEBUG:root:This level is debug
-DEBUG:root:This level is debug write by wangkaixuan
-INFO:root:This level is info
-WARNING:root:This level is warning

@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QWidget,QVBoxLayout,QTreeWidget,QTreeWidgetItem,QLabel
 import json
-from share.share import server_addr,packSendData
+from com.share import server_addr,packSendData
 from .CommWidget import CommWidget
 
 class CenterWidget(QWidget):

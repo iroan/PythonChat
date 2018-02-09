@@ -1,7 +1,7 @@
-from server.db import MySqlHelper
+from ser.db import MySqlHelper
 import json
-from share.share import packSendData
-from share.log import logger_server
+from com.share import packSendData
+from com.log import logger_server
 class Worker:
     def __init__(self,udp_socket,data_from_client,client_addr):
         self.udp_socket = udp_socket

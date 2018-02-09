@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import *
-from share.share import server_addr,packSendData
+from PyQt5.QtWidgets import QMainWindow,QAction
+from com.share import server_addr,packSendData
 from .CenterWidget import CenterWidget
 from .BroadCast import BroadCast
 from .ViewChatHistory import ViewChatHistory
@@ -9,6 +9,7 @@ from .ViewOwnInfo import ViewOwnInfo
 class MainWindow(QMainWindow):
     def __init__(self,udp_socket,nickname,parent = None):
         super(MainWindow, self).__init__(parent)
+        print('已经进入MainWindow')
         self.udp_socket = udp_socket
         self.own_nickname = nickname
         self.setWindowTitle('SSLTools')

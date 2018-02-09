@@ -107,3 +107,4 @@ venv.bak/
 .idea/workspace.xml
 log.txt
 __pycache__
+.idea/

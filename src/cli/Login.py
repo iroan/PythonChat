@@ -1,9 +1,10 @@
-from share.sha import getSha1
+from com.sha import getSha1
 import json
-from socket import *
-from share.share import server_addr,packSendData
-from PyQt5.QtWidgets import *
-from share.log import logger_client
+from socket import socket,AF_INET,SOCK_DGRAM
+from com.share import server_addr,packSendData
+from PyQt5.QtWidgets import QWidget,QGridLayout,QPushButton,QLineEdit,QLabel,QMessageBox
+from com.log import logger_client
+
 class Login(QWidget):
     def __del__(self):
         packSendData(self.udp_socket,server_addr,{'event': 'offline', 'nickname': self.own_nickname})
@@ -53,12 +54,20 @@ class Login(QWidget):
         result = self.udp_socket.recvfrom(1024)
         res = result[0].decode()
         logger_client.debug(res)
+        print(res)
         if res == '登录成功':
-            from client.MainWindow import MainWindow
+            from .main_window import MainWindow
+            logger_client.debug('进入MainWindow0')
             self.main_gui = MainWindow(self.udp_socket, self.nickname)
+            logger_client.debug('进入MainWindow1')
             self.main_gui.show()
+            logger_client.debug('进入MainWindow2')
             self.hide()
+            logger_client.debug('进入MainWindow3')
             # pass
+
+        else:
+            logger_client.debug('未进入MainWindow')
 
     # TODO 登录界面刚开始只显示登录按钮，若发现为注册，再显示登录按钮
     def onRegister(self):

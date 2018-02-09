@@ -1,8 +1,7 @@
 import sys
-sys.path.append('H:\Project\PythonChat')
-import sys
+# sys.path.append('H:\Project\PythonChat\src')
 from PyQt5 import QtWidgets
-from client.Login import Login
+from cli.Login import Login
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

@@ -1,7 +1,4 @@
-from PyQt5.QtWidgets import *
-from share.share import server_addr,packSendData
-from .ProcessRecv import ProcessRecv
-
+from PyQt5.QtWidgets import QWidget,QHBoxLayout,QTextEdit
 class FeedbackHelp(QWidget):
     def __init__(self,parent = None):
         super(FeedbackHelp,self).__init__(parent)

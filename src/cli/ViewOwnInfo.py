@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import *
-from share.share import server_addr,packSendData
+from PyQt5.QtWidgets import QWidget,QMessageBox,QVBoxLayout,QTableWidget,QTableWidgetItem
+from com.share import server_addr,packSendData
 from .ProcessRecv import ProcessRecv
-from share.log import logger_client
+from com.log import logger_client
 class ViewOwnInfo(QWidget):
     '''
     修改的方案：
@@ -24,7 +24,7 @@ class ViewOwnInfo(QWidget):
         packSendData(self.udp_socket, server_addr, {'event': 'get_own_info', 'own_nickname': self.own_nickname})
 
     def recvMessage(self,data):
-        logger_client.debug('client/ViewOwnInfo.py:19\t'+str(data))
+        logger_client.debug('cli/ViewOwnInfo.py:19\t'+str(data))
         if data.get('event') == 'get_own_info':
             data = data.get('data')
             self.row_count = 8

@@ -1,7 +1,5 @@
 from PyQt5.QtWidgets import *
-import json
-from socket import *
-from share.share import server_addr,packSendData
+from com.share import server_addr,packSendData
 from .ProcessRecv import ProcessRecv
 
 class BroadCast(QWidget):

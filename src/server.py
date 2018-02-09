@@ -7,11 +7,11 @@ worker类：
     server worker指管理server业务逻辑的一个类
 '''
 
-from socket import *
-from share import share
+from com import share
+from com.log import logger_server
+from socket import socket,AF_INET,SOCK_DGRAM
 import json
 from threading import Thread
-from share.log import logger_server
 class Main:
     def __init__(self):
         self.udp_sock = socket(AF_INET, SOCK_DGRAM)
@@ -23,12 +23,12 @@ class Main:
                 thread.start()
                 thread.join()
             except ConnectionRefusedError as e:
-                logger_server.error('server.py:26' + str(e))
+                logger_server.error('ser.py:26' + str(e))
 
     def work(self):
         data = json.loads(self.recv_date)
-        logger_server.debug('server.py:30' + str(data))
-        from server.worker import Worker
+        logger_server.debug('ser.py:30' + str(data))
+        from ser.worker import Worker
         Worker(self.udp_sock,data,self.client_addr).processMessage()
 
 if __name__ == '__main__':

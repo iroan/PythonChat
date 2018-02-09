@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QThread,pyqtSignal,Qt
+from PyQt5.QtCore import QThread,pyqtSignal
 import json
 
 class ProcessRecv(QThread):

@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import *
-from share.share import server_addr,packSendData
+from PyQt5.QtWidgets import QWidget,QHBoxLayout,QTableWidget,QTableWidgetItem
+from com.share import server_addr,packSendData
 from .ProcessRecv import ProcessRecv
 
 class ViewChatHistory(QWidget):
