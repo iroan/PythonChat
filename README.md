@@ -25,10 +25,25 @@
 1. 查看与所有用户和组通讯的历史消息
 1. 查看、修改用户的信息
 
-# 开发环境
+# 该项目开发环境
 1. 开发语言：Python3
 2. 编辑器：PyCharm
 3. 主要程序库：PyQt5
+4. OS：Windows10（由于Python的跨平台特性，可以在Linux下运行，可能需要一些小的改动）
+
+# 环境搭建（针对Windows10，Linux类似）
+1. 安装virtualenv
+2. 新建一个Python3作为解释器的虚拟环境
+3. 在该项目目录，且启动相应虚拟环境的条件下执行`pip install -r requirements.txt`就安装好开发环境了
+3. 安装MySQL
+3. DOS执行数据库导入（没有进入MySQL命令行界面），可安装数据库可视化软件方便数据库操作
+```
+导出数据库：
+mysqldump -h HOSTNAME -uUSERNAME -p DBNAME > exported_db.sql
+导入数据库：
+mysql -h HOSTNAME -uUSERNAME -p DBNAME < exported_db.sql
+```
+
 
 # Python技术关键词
 **网络编程**、**UDP**、**数据库**、**MYSQL**、**面向对象**、**PyQt5**、**设计模式**
