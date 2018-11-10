@@ -5,6 +5,7 @@ import tornado.options
 import tornado.web
 import tornado.locks
 import tornado.httpserver
+from pprint import pprint
 from tornado.options import define
 from tornado.options import options
 
@@ -16,10 +17,27 @@ define("db_user",default="dbuser",help="登录数据库的用户名")
 define("db_password",default="iroanDBS47",help="登录数据库的密码")
 
 class BaseHandler(tornado.web.RequestHandler):
-    pass
+    def row2obj(self,row,cur):
+        obj = tornado.util.ObjectDict()
+        for val,desc in zip(row,cur.description):
+            obj[desc.name] = val
+        return obj
+    async def execute(self,stmt,*args):
+        with (await self.application.db.cursor()) as cur:
+            await cur.execute(stmt,args)
+
+    async def query(self,stmt,*args):
+        with (await self.application.db.cursor()) as cur:
+            await cur.execute(stmt,args)
+            return [self.row2obj(row,cur) for row in await cur.fetchall()]
 
 class HomeHandler(BaseHandler):
-    pass
+    async def get(self):
+        print('*'*80)
+        entries = await self.query(
+        'select * from entries'
+        )
+        pprint(entries)
 
 class ArchiveHandler(BaseHandler):
     pass
@@ -51,6 +69,11 @@ class Application(tornado.web.Application):
             (r"/auth/login",AuthLoginHandler),
             (r"/auth/logout",AuthLogoutHandler),
         ]
+        settings = dict(
+        blog_title='王凯旋的博客',
+        debug = True,
+        )
+        super(Application,self).__init__(handlers,**settings)
 async def maybe_create_tables(db):
     try:
         with (await db.cursor()) as target:
@@ -78,5 +101,6 @@ async def main():
         shutdown_event = tornado.locks.Event()
         print(options.print_help())
         await shutdown_event.wait()
+
 if __name__ == "__main__":
     tornado.ioloop.IOLoop.current().run_sync(main)
