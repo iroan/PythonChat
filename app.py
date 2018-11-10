@@ -46,7 +46,13 @@ class FeedHandler(BaseHandler):
     pass
 
 class EntryHandler(BaseHandler):
-    pass
+    def get(self,request):
+        print(self.get_argument('arg'))
+        print(self.get_arguments('arg'))
+        print(self.get_query_arguments('arg'))
+        print(self.get_query_argument('arg'))
+        print(request)
+
 class CompaseHandler(BaseHandler):
     pass
 class AuthCreateHandler(BaseHandler):
@@ -63,7 +69,8 @@ class Application(tornado.web.Application):
             (r"/",HomeHandler),
             (r"/archive",ArchiveHandler),
             (r"/feed",FeedHandler),
-            (r"/entry/(^/]+)",EntryHandler),
+            # (r"/entry/(^/]+)",EntryHandler,dict(arg='122')),
+            (r"/entry/(.*)",EntryHandler),
             (r"/compose",CompaseHandler),
             (r"/auth/create",AuthCreateHandler),
             (r"/auth/login",AuthLoginHandler),
