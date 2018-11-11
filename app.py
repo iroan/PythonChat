@@ -1,3 +1,4 @@
+import os
 import aiopg
 import tornado
 import tornado.ioloop
@@ -35,10 +36,12 @@ class HomeHandler(BaseHandler):
     async def get(self):
         print('*'*80)
         entries = await self.query(
-        'select * from entries'
+        "SELECT * FROM entries ORDER BY published DESC LIMIT 5"
         )
-        pprint(entries)
-
+        if not entries:
+            self.redirect("/compase")
+            return None
+        self.render("home.html",entries=entries)
 class ArchiveHandler(BaseHandler):
     pass
 
@@ -79,6 +82,9 @@ class Application(tornado.web.Application):
         settings = dict(
         blog_title='王凯旋的博客',
         debug = True,
+        template_path=os.path.join(os.path.dirname(__file__),'templates'),
+        static_path=os.path.join(os.path.dirname(__file__),'static'),
+        ui_modules={"Entry": EntryModule},
         )
         super(Application,self).__init__(handlers,**settings)
 async def maybe_create_tables(db):
@@ -108,6 +114,11 @@ async def main():
         shutdown_event = tornado.locks.Event()
         print(options.print_help())
         await shutdown_event.wait()
+
+class EntryModule(tornado.web.UIModule):
+    def render(self, entry):
+        return self.render_string("modules/entry.html", entry=entry)
+
 
 if __name__ == "__main__":
     tornado.ioloop.IOLoop.current().run_sync(main)
